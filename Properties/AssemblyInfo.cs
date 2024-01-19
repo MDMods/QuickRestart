@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using MelonLoader;
+
+[assembly: MelonInfo(typeof(QuickRestart.Main), "QuickRestart", "2.2.0", "AshtonMemer")]
+[assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -9,9 +11,9 @@ using MelonLoader;
 [assembly: AssemblyTitle("QuickRestart")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Muse Dash Modding Community")]
 [assembly: AssemblyProduct("QuickRestart")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright © AshtonMemer 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +23,7 @@ using MelonLoader;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d4dac6d6-aaae-4a6f-b6de-e41475f19ef9")]
+[assembly: Guid("02bd4dca-d6ab-4a96-8f6a-0c34a34f7671")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -33,7 +35,5 @@ using MelonLoader;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.0.0")]
-[assembly: AssemblyFileVersion("2.1.0.0")]
-[assembly: MelonInfo(typeof(QuickRestart.Entry), "QuickRestart", "2.1.0", "AshtonMemer")]
-[assembly: MelonGame("PeroPeroGames", "MuseDash")]
+[assembly: AssemblyVersion("2.2.0.0")]
+[assembly: AssemblyFileVersion("2.2.0.0")]

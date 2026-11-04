@@ -1,14 +1,29 @@
-﻿using Il2CppAssets.Scripts.Database;
+﻿using System.Reflection;
+using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.PeroTools.Commons;
+using Il2CppFormulaBase;
 using MelonLoader;
 using UnityEngine;
+using Main = QuickRestart.Main;
+
+[assembly: AssemblyVersion($"{Main.MelonVersion}.0")]
+[assembly: AssemblyFileVersion($"{Main.MelonVersion}.0")]
+[assembly: MelonInfo(typeof(Main), Main.MelonName, Main.MelonVersion, Main.MelonAuthor)]
+[assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 namespace QuickRestart
 {
     public class Main : MelonMod
     {
+        public const string MelonName = "QuickRestart";
+        public const string MelonVersion = "2.3.0";
+        public const string MelonAuthor = "AshtonMemer";
+
+        private const string BattleSceneName = "GameMain";
+
         private MelonPreferences_Category _category;
-        private MelonPreferences_Entry _restartKeybind;
-        private MelonPreferences_Entry _exitKeybind;
+        private MelonPreferences_Entry<KeyCode> _restartKeybind;
+        private MelonPreferences_Entry<KeyCode> _exitKeybind;
         private bool _isBattleScene;
 
         /// <summary>
@@ -19,9 +34,7 @@ namespace QuickRestart
             _category = MelonPreferences.CreateCategory("QuickRestart");
             _restartKeybind = _category.CreateEntry("Restart Key", KeyCode.Backspace);
             _exitKeybind = _category.CreateEntry("Exit Song Key", KeyCode.Delete);
-            MelonPreferences.Save();
-
-            base.OnInitializeMelon();
+            _category.SaveToFile(false);
         }
 
         /// <summary>
@@ -31,26 +44,36 @@ namespace QuickRestart
         {
             if (!_isBattleScene) return;
 
-            if (Input.GetKeyDown((KeyCode)_restartKeybind.BoxedValue))
+            var restartPressed = Input.GetKeyDown(_restartKeybind.Value);
+            var exitPressed = Input.GetKeyDown(_exitKeybind.Value);
+
+            if ((!restartPressed && !exitPressed) || !IsBattleInProgress()) return;
+
+            if (restartPressed)
             {
                 BattleHelper.GameRestart();
             }
-            else if (Input.GetKeyDown((KeyCode)_exitKeybind.BoxedValue))
+            else
             {
                 BattleHelper.GameFinish();
             }
-
-            base.OnUpdate();
         }
 
         /// <summary>
-        /// Ensure the battle scene is the active one, otherwise do not allow restarting.
+        /// Track whether the battle scene is the active one.
         /// </summary>
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            _isBattleScene = sceneName == "GameMain";
+            _isBattleScene = sceneName == BattleSceneName;
+        }
 
-            base.OnSceneWasLoaded(buildIndex, sceneName);
+        /// <summary>
+        /// Whether the song is actively being played, which is the only time restarting or exiting is safe.
+        /// </summary>
+        private static bool IsBattleInProgress()
+        {
+            var battle = Singleton<StageBattleComponent>.instance;
+            return battle != null && battle.isInGame && !battle.isDead && !battle.isSucceed;
         }
     }
 }
